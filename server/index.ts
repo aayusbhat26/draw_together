@@ -1,4 +1,5 @@
 import { createServer } from "http";
+import { parse } from "url";
 
 import {} from "@/common/types/global";
 
@@ -169,7 +170,10 @@ nextApp.prepare().then(async () => {
     });
   });
 
-  app.all("*", (req: any, res: any) => nextHandler(req, res));
+  app.all("*", (req: any, res: any) => {
+    const parsedUrl = parse(req.url, true);
+    nextHandler(req, res, parsedUrl);
+  });
 
   server.listen(port, () => {
     // eslint-disable-next-line no-console
